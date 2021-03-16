@@ -117,57 +117,65 @@ class ScrollHeadOverlayState extends State<ScrollHeadOverlay> {
         barrierDismissible: true,
         builder: (BuildContext context) {
           final orientation = MediaQuery.of(context).orientation;
-          return AlertDialog(
-            scrollable: true,
-            insetPadding: EdgeInsets.all(0),
-            contentPadding: orientation == Orientation.portrait
-                ? EdgeInsets.all(24)
-                : EdgeInsets.only(top: 0, right: 24, left: 24, bottom: 0),
-            buttonPadding: orientation == Orientation.portrait
-                ? EdgeInsets.all(8)
-                : EdgeInsets.all(4),
-            backgroundColor:
-                _pdfViewerThemeData.paginationDialogStyle.backgroundColor,
-            title: Text(
-              _localizations.pdfGoToPageLabel,
-              style: _pdfViewerThemeData.paginationDialogStyle.headerTextStyle,
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(4.0))),
-            content: SingleChildScrollView(child: _paginationTextField()),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  _localizations.pdfPaginationDialogCancelLabel,
-                  style: _pdfViewerThemeData
-                              .paginationDialogStyle.cancelTextStyle.color ==
-                          null
-                      ? _pdfViewerThemeData
-                          .paginationDialogStyle.cancelTextStyle
-                          .copyWith(color: Theme.of(context).primaryColor)
-                      : _pdfViewerThemeData
-                          .paginationDialogStyle.cancelTextStyle,
-                ),
-                onPressed: () {
-                  _textFieldController.clear();
-                  Navigator.of(context).pop();
-                },
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            child: AlertDialog(
+              scrollable: true,
+              insetPadding: EdgeInsets.all(0),
+              contentPadding: orientation == Orientation.portrait
+                  ? EdgeInsets.all(24)
+                  : EdgeInsets.only(top: 0, right: 24, left: 24, bottom: 0),
+              buttonPadding: orientation == Orientation.portrait
+                  ? EdgeInsets.all(8)
+                  : EdgeInsets.all(4),
+              backgroundColor: _pdfViewerThemeData
+                  .paginationDialogStyle.backgroundColor
+                  .withOpacity(0.9),
+              titlePadding: orientation == Orientation.portrait
+                  ? EdgeInsets.only(left: 30, top: 20)
+                  : EdgeInsets.only(top: 0, right: 24, left: 24, bottom: 0),
+              title: Text(
+                _localizations.pdfGoToPageLabel,
+                style:
+                    _pdfViewerThemeData.paginationDialogStyle.headerTextStyle,
               ),
-              FlatButton(
-                child: Text(
-                  _localizations.pdfPaginationDialogOkLabel,
-                  style: _pdfViewerThemeData
-                              .paginationDialogStyle.okTextStyle.color ==
-                          null
-                      ? _pdfViewerThemeData.paginationDialogStyle.okTextStyle
-                          .copyWith(color: Theme.of(context).primaryColor)
-                      : _pdfViewerThemeData.paginationDialogStyle.okTextStyle,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              content: SingleChildScrollView(child: _paginationTextField()),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    _localizations.pdfPaginationDialogCancelLabel,
+                    style: _pdfViewerThemeData
+                                .paginationDialogStyle.cancelTextStyle.color ==
+                            null
+                        ? _pdfViewerThemeData
+                            .paginationDialogStyle.cancelTextStyle
+                            .copyWith(color: Theme.of(context).primaryColor)
+                        : _pdfViewerThemeData
+                            .paginationDialogStyle.cancelTextStyle,
+                  ),
+                  onPressed: () {
+                    _textFieldController.clear();
+                    Navigator.of(context).pop();
+                  },
                 ),
-                onPressed: () {
-                  _handlePageNumberValidation();
-                },
-              )
-            ],
+                TextButton(
+                  child: Text(
+                    _localizations.pdfPaginationDialogOkLabel,
+                    style: _pdfViewerThemeData
+                                .paginationDialogStyle.okTextStyle.color ==
+                            null
+                        ? _pdfViewerThemeData.paginationDialogStyle.okTextStyle
+                            .copyWith(color: Theme.of(context).primaryColor)
+                        : _pdfViewerThemeData.paginationDialogStyle.okTextStyle,
+                  ),
+                  onPressed: () {
+                    _handlePageNumberValidation();
+                  },
+                )
+              ],
+            ),
           );
         });
   }
@@ -183,10 +191,17 @@ class ScrollHeadOverlayState extends State<ScrollHeadOverlay> {
           focusNode: _focusScopeNode,
           decoration: InputDecoration(
             isDense: true,
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+            // focusedBorder: UnderlineInputBorder(
+            //   borderSide: BorderSide(color: Theme.of(context).primaryColor),
+            // ),
+            border: new OutlineInputBorder(
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(50.0),
+              ),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 6),
+            filled: true,
+            // fillColor: Theme.of(context).accentColor,
+            contentPadding: const EdgeInsets.all(20),
             hintText: _localizations.pdfEnterPageNumberLabel,
             hintStyle: _pdfViewerThemeData.paginationDialogStyle.hintTextStyle,
             counterText:
